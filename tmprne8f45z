@@ -1,0 +1,33 @@
+"""
+Pathfinding visualizer
+"""
+import pygame
+
+pygame.init()
+
+#Window
+W, H = 800,600
+#ROWS, COLS = 10, 10
+NODESIZE = 5
+win = pygame.display.set_mode((W,H))
+
+def draw_grid():
+    l = NODESIZE +1
+    ROWS, COLS = int(H/l), int(W/l)
+    color = (0,255,100)
+    for i in ROWS:
+        for j in COLS:
+            pygame.draw.rect(win, color, NODESIZE)
+    
+draw_grid()
+            
+
+#TODO:
+    #node class
+    #create grid
+    #implement algorithms
+    #UI
+
+
+
+
