@@ -10,6 +10,7 @@ class node:
         self.neighbors = []
         self.visited = False
         self.inQueue = False
+        self.isObstacle = False
         
     def find_neighbors(self, grid):
         rows = np.size(grid, 0)
