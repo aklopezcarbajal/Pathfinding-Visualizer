@@ -20,28 +20,6 @@ grey  = (50,50,50)
     #implement algorithms
     #UI
     #index to position function and viceversa
-
-
-def create_grid(n, m):
-    grid = []
-    for i in range(n):
-        row = []
-        for j in range(m):
-            row.append(node(i,j))
-        grid.append(row)
-    return grid
-            
-def connect_nodes(grid):
-    n = len(grid)
-    m = len(grid[0])
-    
-    for i in range(n):
-        for j in range(m):
-            grid[i][j].find_neighbors(grid)
-            
-#def add_obstacle(position, grid):
-    #position to index
-    #grid[i][i].isObstacle
     
 def index_to_position(i, j):
     x = int( (j+1)*DIST + j*NODESIZE + NODESIZE/2 )
@@ -60,24 +38,38 @@ def draw_grid(grid):
             if len(grid[i][j].neighbors) > 0:
                 pygame.draw.rect(win, (200,100,100), (position[0],position[1],NODESIZE,NODESIZE) )
                 
+
+
+def create_grid(n, m):
+    grid = []
+    for i in range(n):
+        row = []
+        for j in range(m):
+            row.append(node(i,j))
+        grid.append(row)
+    return grid
+            
+def connect_nodes(grid):
+    n = len(grid)
+    m = len(grid[0])
+    
+    for i in range(n):
+        for j in range(m):
+            grid[i][j].find_neighbors(grid)
     
 """--------------------------------------------------------"""
 
 G = create_grid(ROWS, COLS)
+connect_nodes(G)  
 G[3][5].isObstacle = True    
 G[5][15].isObstacle = True    
 G[10][10].isObstacle = True
-connect_nodes(G)  
 
 
 running = True
 while running:  
     win.fill((100,100,100))
     draw_grid(G)
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
     
     pygame.display.update()
 
