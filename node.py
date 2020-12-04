@@ -7,6 +7,7 @@ class node:
     def __init__(self, row, col):
         self.i = row
         self.j = col
+        self.parent = None
         self.neighbors = []
         self.visited = False
         self.inQueue = False

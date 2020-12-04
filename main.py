@@ -2,7 +2,9 @@
 Pathfinding visualizer
 """
 import pygame
+import numpy as np
 from node import node
+from algorithms import Dijkstra
 
 pygame.init()
 
@@ -12,8 +14,10 @@ win = pygame.display.set_mode((W,H))
 
 NODESIZE = 15
 DIST = 5
-ROWS, COLS = 15, 25#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
-color = (100,155,100)
+ROWS, COLS = 10, 5#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
+#Colors
+green = (100,255,100)
+blue  = (100,100,255)
 grey  = (50,50,50)
 
 #TODO:
@@ -32,8 +36,8 @@ def create_grid(n, m):
     return grid
             
 def connect_nodes(grid):
-    n = len(grid)
-    m = len(grid[0])
+    n = np.size(grid, 0)
+    m = np.size(grid, 1)
     
     for i in range(n):
         for j in range(m):
@@ -56,24 +60,31 @@ def draw_grid(grid):
             if grid[i][j].isObstacle:
                 pygame.draw.rect(win, grey, (position[0],position[1],NODESIZE,NODESIZE) )
             else:
-                pygame.draw.rect(win, color, (position[0],position[1],NODESIZE,NODESIZE) )
-            if len(grid[i][j].neighbors) > 0:
-                pygame.draw.rect(win, (200,100,100), (position[0],position[1],NODESIZE,NODESIZE) )
-                
+                pygame.draw.rect(win, green, (position[0],position[1],NODESIZE,NODESIZE) )
+
+def draw_path(path):
+    for u in path:
+        position = index_to_position(u.i, u.j)
+        pygame.draw.rect(win, blue, (position[0],position[1],NODESIZE,NODESIZE) )
+        
     
 """--------------------------------------------------------"""
 
 G = create_grid(ROWS, COLS)
-G[3][5].isObstacle = True    
-G[5][15].isObstacle = True    
-G[10][10].isObstacle = True
+G[0][2].isObstacle = True 
+G[1][2].isObstacle = True    
+G[2][2].isObstacle = True    
+G[3][2].isObstacle = True  
+G[4][2].isObstacle = True
 connect_nodes(G)  
+p = Dijkstra(G, G[0][0], G[3][4])
 
 
 running = True
 while running:  
-    win.fill((100,100,100))
+    win.fill((50,50,80))
     draw_grid(G)
+    draw_path(p)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
