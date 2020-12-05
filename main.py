@@ -23,8 +23,6 @@ grey  = (50,50,50)
 #TODO:
     #implement algorithms
     #UI
-    #index to position function and viceversa
-
 
 def create_grid(n, m):
     grid = []
@@ -43,9 +41,14 @@ def connect_nodes(grid):
         for j in range(m):
             grid[i][j].find_neighbors(grid)
             
-#def add_obstacle(position, grid):
-    #position to index
-    #grid[i][i].isObstacle
+def add_obstacle(position, grid):
+    index = position_to_index(position[0], position[1])
+    grid[index[0]][index[1]].isObstacle = True
+    
+def position_to_index(x,y):
+    i = int( (y-DIST - NODESIZE/2)/(DIST + NODESIZE) )
+    j = int( (x-DIST - NODESIZE/2)/(DIST + NODESIZE) )
+    return [i,j]
     
 def index_to_position(i, j):
     x = int( (j+1)*DIST + j*NODESIZE + NODESIZE/2 )
@@ -71,24 +74,22 @@ def draw_path(path):
 """--------------------------------------------------------"""
 
 G = create_grid(ROWS, COLS)
-G[0][2].isObstacle = True 
-G[1][2].isObstacle = True    
-G[2][2].isObstacle = True    
-G[3][2].isObstacle = True  
-G[4][2].isObstacle = True
 connect_nodes(G)  
-p = Dijkstra(G, G[0][0], G[3][4])
+#p = Dijkstra(G, G[0][0], G[3][4])
 
 
 running = True
 while running:  
     win.fill((50,50,80))
     draw_grid(G)
-    draw_path(p)
+    #draw_path(p)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos
+            add_obstacle([x,y], G)
     
     pygame.display.update()
 
