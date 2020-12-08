@@ -28,5 +28,19 @@ def Dijkstra(grid, start, end):
                 u.visited = True
     return return_path(grid, start, end)
     
+def dfs_visit(u,end):
+    u.inQueue = True
+    for v in u.neighbors:
+        if not v.visited and not v.inQueue:
+            v.parent = u
+            if v == end:
+                return
+            dfs_visit(v, end)
+    u.visited = True
+    u.inQueue = False
+
     
+    
+
+
     

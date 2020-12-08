@@ -4,7 +4,7 @@ Pathfinding visualizer
 import pygame
 import numpy as np
 from node import node
-from algorithms import Dijkstra
+from algorithms import *
 
 pygame.init()
 
@@ -18,6 +18,7 @@ ROWS, COLS = 10, 5#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
 #Colors
 green = (100,255,100)
 blue  = (100,100,255)
+red   = (255,100,100)
 grey  = (50,50,50)
 
 #TODO:
@@ -68,7 +69,10 @@ def draw_grid(grid):
 def draw_path(path):
     for u in path:
         position = index_to_position(u.i, u.j)
-        pygame.draw.rect(win, blue, (position[0],position[1],NODESIZE,NODESIZE) )
+        if u == path[0] or u == path[-1]:
+            pygame.draw.rect(win, red, (position[0],position[1],NODESIZE,NODESIZE) )
+        else:
+            pygame.draw.rect(win, blue, (position[0],position[1],NODESIZE,NODESIZE) )
         
     
 """--------------------------------------------------------"""
@@ -76,13 +80,15 @@ def draw_path(path):
 G = create_grid(ROWS, COLS)
 connect_nodes(G)  
 #p = Dijkstra(G, G[0][0], G[3][4])
+dfs_visit(G[0][0], G[3][4])
+p = return_path(G, G[0][0], G[3][4])
 
 
 running = True
 while running:  
     win.fill((50,50,80))
     draw_grid(G)
-    #draw_path(p)
+    draw_path(p)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
