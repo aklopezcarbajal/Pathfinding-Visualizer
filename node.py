@@ -1,16 +1,18 @@
 """
 Node class | Pathfinding Visualizer
 """
+import sys
 import numpy as np
 
 class node:
     def __init__(self, row, col):
         self.i = row
         self.j = col
-        self.parent = None
+        self.parent    = None
         self.neighbors = []
-        self.visited = False
-        self.inQueue = False
+        self.visited   = False
+        self.inQueue   = False
+        self.distance  = sys.maxsize
         self.isObstacle = False
         
     def find_neighbors(self, grid):

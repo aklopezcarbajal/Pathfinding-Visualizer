@@ -14,7 +14,7 @@ win = pygame.display.set_mode((W,H))
 
 NODESIZE = 15
 DIST = 5
-ROWS, COLS = 10, 5#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
+ROWS, COLS = 12, 5#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
 #Colors
 green = (100,255,100)
 blue  = (100,100,255)
@@ -79,9 +79,17 @@ def draw_path(path):
 
 G = create_grid(ROWS, COLS)
 connect_nodes(G)  
-#p = Dijkstra(G, G[0][0], G[3][4])
-dfs_visit(G[0][0], G[3][4])
-p = return_path(G, G[0][0], G[3][4])
+#Obstacle
+G[1][2].isObstacle = True
+G[2][2].isObstacle = True
+G[3][2].isObstacle = True
+G[4][2].isObstacle = True
+
+start = G[0][0]
+end   = G[2][3]
+Dijkstra(G,start)
+#dfs_visit(start, end)
+p = return_path(G, start, end)
 
 
 running = True
