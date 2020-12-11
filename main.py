@@ -16,6 +16,7 @@ NODESIZE = 15
 DIST = 5
 ROWS, COLS = 12, 5#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
 #Colors
+bg    = (80,80,100)
 green = (100,255,100)
 blue  = (100,100,255)
 red   = (255,100,100)
@@ -94,7 +95,7 @@ p = return_path(G, start, end)
 
 running = True
 while running:  
-    win.fill((50,50,80))
+    win.fill(bg)
     draw_grid(G)
     draw_path(p)
     

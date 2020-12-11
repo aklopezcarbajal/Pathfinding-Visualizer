@@ -40,13 +40,11 @@ def dfs_visit(u,end):
 
 #We need to create an id to insert the nodes in the priority queue
 def node_id(node):
-    istr = str(node.i)
-    jstr = str(node.j)
-    return [istr,jstr]
+    return (node.i, node.j)
 
-def get_node(grid, index):
-    i = int(index[0])
-    j = int(index[1])
+def get_node(grid, pair):
+    i = pair[0]
+    j = pair[1]
     return grid[i][j]
     
 #In this case, the grid has equal weight on every edge
@@ -67,9 +65,32 @@ def Dijkstra(grid, s):
                     v.parent = u
                     queue.put((v.distance, node_id(v)))
         u.visited = True
-        
-        
+
+#Distance to the start node (Manhattan Distance)
+def g(s, u):
+    return abs(s.i - u.i) + abs(s.j - u.j)
+
+#Distance to the end node (Manhattan Distance)
+def h(e, u):
+    return abs(e.i - u.i) + abs(e.j - u.j)
+
+def f(u, start, end):
+    return g(start,u) + h(end,u)
+  
+def Astar(grid, start, end):
+    queue = PriorityQueue()
+    queue.put((0, node_id(start)))
     
+    while not queue.empty():
+        u_id = queue.get()[1]
+        u = get_node(grid,u_id)
+        
+        if u == end:
+            return
+        
+        for v in u.neighbors:
+            if v.visited == False and v.isObstacle == False:
+                return
     
 
 
