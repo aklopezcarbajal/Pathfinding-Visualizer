@@ -2,6 +2,7 @@
 Pathfinding Algorithms
 """
 import numpy as np
+import random
 from collections import deque
 from queue import PriorityQueue
 from misc import *
@@ -32,7 +33,7 @@ def bfs(win, grid, start, end):
         u.inQueue = False
         draw_grid(win,grid)
     
-def dfs_visit(u,end):
+def dfs(u,end):
     u.inQueue = True
     for v in u.neighbors:
         if not v.visited and not v.isObstacle and not v.inQueue:
@@ -101,7 +102,33 @@ def Astar(grid, start, end):
         for v in u.neighbors:
             if v.visited == False and v.isObstacle == False:
                 return
-    
 
+#Randomized Prim's Alg
+def make_maze(win, grid):
+    n = np.size(grid, 0)
+    m = np.size(grid, 1)
+    #Start with a grid full of walls
+    for i in range(n):
+        for j in range(m):
+            grid[i][j].isObstacle = True
+    #Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
+    s = grid[random.randrange(n)][random.randrange(m)]
+    s.visited = True
+    s.isObstacle = False
+    
+    wall_list = []
+    for v in s.neighbors:
+        wall_list.append(v)
+    #While there are walls in the list:
+    while len(wall_list) > 0:
+        draw_grid(win,grid)
+        #Choose a random node from the list
+        randi = random.randrange(len(wall_list) )
+        u = wall_list[randi]
+        
+        #Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
+            #Make the wall a passage and mark the unvisited cell as part of the maze.
+            #Add the neighboring walls of the cell to the wall list.
+        #Remove the wall from the list.
 
     

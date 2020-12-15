@@ -12,7 +12,7 @@ DIST = 5
 bg    = (80,80,100)
 green = (100,255,100)
 blue  = (100,100,255)
-darkBlue = (20,20,60)
+darkBlue = (30,30,60)
 red   = (255,100,100)
 grey  = (130,130,130)
 darkGrey = (30,30,30)
@@ -65,11 +65,12 @@ def draw_grid(win, grid):
             
             if grid[i][j].isObstacle:
                 pygame.draw.rect(win, darkGrey, (x,y,NODESIZE,NODESIZE) )
-            if grid[i][j].inQueue:
-                pygame.draw.circle(win, blue, (x +NODESIZE/2,y +NODESIZE/2), NODESIZE/2 - 1)
-            if grid[i][j].visited:
-                pygame.draw.rect(win, darkBlue, (x,y,NODESIZE,NODESIZE) )
-    
+            else:
+                if grid[i][j].inQueue:
+                    pygame.draw.circle(win, blue, (x +NODESIZE/2,y +NODESIZE/2), NODESIZE/2 - 1)
+                if grid[i][j].visited:
+                    pygame.draw.rect(win, darkBlue, (x,y,NODESIZE,NODESIZE) )
+        
     pygame.display.update()
 
 
