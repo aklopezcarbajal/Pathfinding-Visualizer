@@ -10,9 +10,9 @@ pygame.init()
 
 #Window
 W, H = 800,600
-win = pygame.display.set_mode((W,H))
+#win = pygame.display.set_mode((W,H))
 
-ROWS, COLS = 5, 5#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
+ROWS, COLS = 3, 5#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
   
 """--------------------------------------------------------"""
 
@@ -27,11 +27,13 @@ G[4][2].isObstacle = True
 G[4][1].isObstacle = True
 G[4][0].isObstacle = True
 """
+test = [ [i for i in range(COLS)] for j in range(ROWS)  ]
+print(test)
 
 start = G[0][0]
 end   = G[2][3]
 
-running = True
+running = False
 while running:  
     win.fill(bg)
     draw_grid(win, G)

@@ -1,6 +1,7 @@
 """
 Pathfinding Algorithms
 """
+import sys
 import numpy as np
 import random
 from collections import deque
@@ -82,7 +83,7 @@ def g(s, u):
     return abs(s.i - u.i) + abs(s.j - u.j)
 
 #Distance to the end node (Manhattan Distance)
-def h(e, u):
+def h(u, e):
     return abs(e.i - u.i) + abs(e.j - u.j)
 
 def f(u, start, end):
@@ -90,11 +91,23 @@ def f(u, start, end):
   
 def Astar(grid, start, end):
     queue = PriorityQueue()
-    queue.put((0, node_id(start)))
+    openSet = {}    
+    
+    n = np.size(grid, 0)
+    m = np.size(grid, 1)
+    G = [ [sys.maxsize for i in range(m)] for j in range(n)  ]
+    F = [ [sys.maxsize for i in range(m)] for j in range(n)  ]
+    
+    order = 0
+    queue.put((0, order, node_id(start)))
+    openSet.add(start)
+    
+    G[start.i][start.j] = 0
+    F[start.i][start.j] = h(start, end)
     
     while not queue.empty():
-        u_id = queue.get()[1]
-        u = get_node(grid,u_id)
+        u = get_node(grid, queue.get()[2])
+        openSet.remove(u)
         
         if u == end:
             return
