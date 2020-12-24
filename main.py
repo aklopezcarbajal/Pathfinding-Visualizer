@@ -10,7 +10,7 @@ pygame.init()
 
 #Window
 W, H = 800,600
-#win = pygame.display.set_mode((W,H))
+win = pygame.display.set_mode((W,H))
 
 ROWS, COLS = 3, 5#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
   
@@ -33,7 +33,7 @@ print(test)
 start = G[0][0]
 end   = G[2][3]
 
-running = False
+running = True
 while running:  
     win.fill(bg)
     draw_grid(win, G)
@@ -43,9 +43,10 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            make_maze(win,G)
+            #make_maze(win,G)
             #bfs(win,G,start,end)
             #Dijkstra(win, G, start)
+            Astar(win,G,start,end)
             #path = return_path(G, start, end)
             x, y = event.pos
             add_obstacle(G, [x,y])

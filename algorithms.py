@@ -77,44 +77,58 @@ def Dijkstra(win, grid, s):
         u.visited = True
         v.inQueue = False
         draw_grid(win,grid)
-
+"""
 #Distance to the start node (Manhattan Distance)
 def g(s, u):
     return abs(s.i - u.i) + abs(s.j - u.j)
 
-#Distance to the end node (Manhattan Distance)
-def h(u, e):
-    return abs(e.i - u.i) + abs(e.j - u.j)
 
 def f(u, start, end):
     return g(start,u) + h(end,u)
-  
-def Astar(grid, start, end):
+"""
+ #Distance to the end node (Manhattan Distance)
+def h(u, e):
+    return abs(e.i - u.i) + abs(e.j - u.j)
+ 
+def Astar(win, grid, start, end):
     queue = PriorityQueue()
-    openSet = {}    
+    openSet = set([])    
     
     n = np.size(grid, 0)
     m = np.size(grid, 1)
-    G = [ [sys.maxsize for i in range(m)] for j in range(n)  ]
-    F = [ [sys.maxsize for i in range(m)] for j in range(n)  ]
+    g = [ [sys.maxsize for i in range(m)] for j in range(n)  ]
+    f = [ [sys.maxsize for i in range(m)] for j in range(n)  ]
     
     order = 0
     queue.put((0, order, node_id(start)))
     openSet.add(start)
     
-    G[start.i][start.j] = 0
-    F[start.i][start.j] = h(start, end)
+    g[start.i][start.j] = 0
+    f[start.i][start.j] = h(start, end)
     
     while not queue.empty():
         u = get_node(grid, queue.get()[2])
         openSet.remove(u)
+        u.visited = True
+        draw_grid(win, grid)
         
         if u == end:
             return
         
         for v in u.neighbors:
             if v.visited == False and v.isObstacle == False:
-                return
+                cost = g[u.i][u.j] + 1
+                
+                if cost < g[v.i][v.j]:
+                    g[v.i][v.j] = cost
+                    f[v.i][v.j] = g[v.i][v.j] + h(v,end)
+                    v.parent = u
+                    
+                    if v not in openSet:
+                        order += 1
+                        queue.put((f[v.i][v.j], order, node_id(v)))
+                        openSet.add(v)
+                        
 
 #Randomized Prim's Alg
 def make_maze(win, grid):
