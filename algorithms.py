@@ -8,24 +8,32 @@ from collections import deque
 from queue import PriorityQueue
 from misc import *
 
-def return_path(grid, start, end):
+def get_path(grid, start, end):
     path = []
     u = end
     while u.parent != None:
+        u.isOnPath = True
         path.append(u)
         u = u.parent
+    
+    u.isOnPath = True
     path.append(u)
-    return path
-        
-
+    
+def valid(u):
+    if not u.visited and not u.isObstacle and not u.inQueue:
+        return True
+    return False
+    
 def bfs(win, grid, start, end):
     queue = deque([start])
     
     while len(queue) > 0:
         u = queue.popleft()
-        #if u == end --> find path and return
+        
+        if u == end:
+            return
         for v in u.neighbors:
-            if not v.visited and not v.isObstacle and not v.inQueue:
+            if valid(v):
                 queue.append(v)
                 v.parent = u
                 v.inQueue = True
@@ -34,16 +42,18 @@ def bfs(win, grid, start, end):
         u.inQueue = False
         draw_grid(win,grid)
     
-def dfs(u,end):
+def dfs(win, grid, u, end):
+    if u == end:
+        return
+    
     u.inQueue = True
     for v in u.neighbors:
-        if not v.visited and not v.isObstacle and not v.inQueue:
+        if valid(v):
             v.parent = u
-            if v == end:
-                return
-            dfs_visit(v, end)
+            dfs(win, grid, v, end)
     u.visited = True
     u.inQueue = False
+    draw_grid(win,grid)
 
 #We need to create an id to insert the nodes in the priority queue
 def node_id(node):
@@ -65,7 +75,7 @@ def Dijkstra(win, grid, s):
         u = get_node(grid,u_id)
         
         for v in u.neighbors:
-            if not v.visited and not v.isObstacle and not v.inQueue:
+            if valid(v):
                 dist = u.distance + 1
                 if v.distance > dist:
                     v.distance = dist
@@ -77,15 +87,7 @@ def Dijkstra(win, grid, s):
         u.visited = True
         v.inQueue = False
         draw_grid(win,grid)
-"""
-#Distance to the start node (Manhattan Distance)
-def g(s, u):
-    return abs(s.i - u.i) + abs(s.j - u.j)
 
-
-def f(u, start, end):
-    return g(start,u) + h(end,u)
-"""
  #Distance to the end node (Manhattan Distance)
 def h(u, e):
     return abs(e.i - u.i) + abs(e.j - u.j)
@@ -110,13 +112,15 @@ def Astar(win, grid, start, end):
         u = get_node(grid, queue.get()[2])
         openSet.remove(u)
         u.visited = True
+        u.inQueue = False
+        
         draw_grid(win, grid)
         
         if u == end:
             return
         
         for v in u.neighbors:
-            if v.visited == False and v.isObstacle == False:
+            if not v.visited and not v.isObstacle:
                 cost = g[u.i][u.j] + 1
                 
                 if cost < g[v.i][v.j]:
@@ -128,6 +132,8 @@ def Astar(win, grid, start, end):
                         order += 1
                         queue.put((f[v.i][v.j], order, node_id(v)))
                         openSet.add(v)
+                        v.inQueue = True
+                        draw_grid(win, grid)                  
                         
 
 #Randomized Prim's Alg

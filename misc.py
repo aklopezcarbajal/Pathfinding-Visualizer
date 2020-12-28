@@ -10,7 +10,7 @@ DIST = 5
 
 #Colors
 bg    = (80,80,100)
-green = (100,255,100)
+green = (80,255,80)
 blue  = (100,100,255)
 darkBlue = (30,30,60)
 red   = (255,100,100)
@@ -70,15 +70,9 @@ def draw_grid(win, grid):
                     pygame.draw.circle(win, blue, (x +NODESIZE/2,y +NODESIZE/2), NODESIZE/2 - 1)
                 if grid[i][j].visited:
                     pygame.draw.rect(win, darkBlue, (x,y,NODESIZE,NODESIZE) )
-        
+                if grid[i][j].isOnPath:
+                    pygame.draw.rect(win, green, (x,y,NODESIZE,NODESIZE) )
+    
     pygame.display.update()
 
-
-def draw_path(win, path):
-    for u in path:
-        position = index_to_position(u.i, u.j)
-        if u == path[0] or u == path[-1]:
-            pygame.draw.rect(win, red, (position[0],position[1],NODESIZE,NODESIZE) )
-        else:
-            pygame.draw.rect(win, blue, (position[0],position[1],NODESIZE,NODESIZE) )
  

@@ -13,7 +13,9 @@ class node:
         self.visited   = False
         self.inQueue   = False
         self.distance  = sys.maxsize
+        
         self.isObstacle = False
+        self.isOnPath   = False
         
     def find_neighbors(self, grid):
         if self.isObstacle:
