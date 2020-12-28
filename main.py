@@ -40,11 +40,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            #make_maze(win,G)
+            make_maze(win,G)
             #dfs(win,G,start,end)
             #Dijkstra(win, G, start)
-            Astar(win,G,start,end)
-            get_path(G, start, end)
+            #Astar(win,G,start,end)
+            #get_path(G, start, end)
             
             x, y = event.pos
             add_obstacle(G, [x,y])
