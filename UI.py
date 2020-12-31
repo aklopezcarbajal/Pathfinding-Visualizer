@@ -3,31 +3,37 @@ UI | Pathfinding Visualizer
 """
 import pygame
 
-blue  = (100,100,255)
-darkBlue = (30,30,60)
+#Background
+background = '#55708D'
 
+#Buttons
+outline_color = '#153C62'
+button_color = '#4E6E91'
+font_color = '#07111D'
 
+#Grid
+unvisited_color = '#A2A6BE'
+visited_color = '#373660'
+inQueue_color = '#408289'
+path_color = '#873E59'
+obstacle_color = '#243547'
 
 class button():
     def __init__(self, position, width, height, text=''):
-        self.color = '#7E85B1'
+        self.color = button_color
         self.x = position[0]
         self.y = position[1]
         self.width = width
         self.height = height
         self.text = text
-        self.font = pygame.font.SysFont('comicsans', 30)
-
-    def draw(self,win,outline=None):
-        #Call this method to draw the button on the screen
-        if outline:
-            pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
-            
+        
+    def draw(self,win):
+        #pygame.draw.rect(win, outline_color, (self.x-2,self.y-2,self.width+4,self.height+4),0)
         pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),border_radius=5)
         
         if self.text != '':
-            font = self.font
-            text = font.render(self.text, 1, (0,0,0))
+            font = pygame.font.SysFont('arial', 20)
+            text = font.render(self.text, 1, font_color)
             win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
     def isOver(self, pos):

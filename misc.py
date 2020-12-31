@@ -9,13 +9,14 @@ NODESIZE = 15
 DIST = 5
 
 #Colors
-bg    = (80,80,100)
+bg    = (80,80,80)
 green = (80,255,80)
 blue  = (100,100,255)
 darkBlue = (30,30,60)
 red   = (255,100,100)
 grey  = (130,130,130)
 darkGrey = (30,30,30)
+
 
 def create_grid(n, m):
     grid =[]

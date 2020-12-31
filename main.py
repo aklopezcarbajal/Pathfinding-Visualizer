@@ -16,9 +16,9 @@ win = pygame.display.set_mode((W,H))
 ROWS, COLS = 10, 10#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
 
 #Buttons
-buttonWidth, buttonHeight = 80, 50
+buttonWidth, buttonHeight = 70, 35
 buttons = []
-bfs_button = button( [10,10], buttonWidth, buttonHeight, 'Check this font' )
+bfs_button = button( [10,10], buttonWidth, buttonHeight, 'BFS' )
 buttons.append(bfs_button)
 dfs_button = button( [20+buttonWidth,10], buttonWidth, buttonHeight, 'DFS' )
 buttons.append(dfs_button)
@@ -50,7 +50,7 @@ def show_buttons():
 
 running = True
 while running:  
-    win.fill(bg)
+    win.fill(background)
     #draw_grid(win, G)
     show_buttons()
     
@@ -63,9 +63,10 @@ while running:
             #Dijkstra(win, G, start)
             #Astar(win,G,start,end)
             #get_path(G, start, end)
-            
             x, y = event.pos
-            add_obstacle(G, [x,y])
+            for b in buttons:
+                print("button",b.text, "is pressed:",b.isOver([x,y]))
+            #add_obstacle(G, [x,y])
     
     pygame.display.update()
 
