@@ -4,7 +4,6 @@ Pathfinding visualizer
 import pygame
 import numpy as np
 from algorithms import *
-from misc import *
 from UI import *
 
 pygame.init()
@@ -13,7 +12,7 @@ pygame.init()
 W, H = 800,600
 win = pygame.display.set_mode((W,H))
 
-ROWS, COLS = 10, 10#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
+ROWS, COLS = 28, 40#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
 
 #Buttons
 buttonWidth, buttonHeight = 70, 35
@@ -30,45 +29,52 @@ buttons.append(maze_button)
 fonts = pygame.font.get_fonts()
 """--------------------------------------------------------"""
 
-G = create_grid(ROWS, COLS)
-connect_nodes(G)  
+grid = create_grid(ROWS, COLS)
+connect_nodes(grid)  
 #Obstacle
+"""
+grid[1][2].isObstacle = True
+grid[2][2].isObstacle = True
+grid[3][2].isObstacle = True
+grid[4][2].isObstacle = True
+grid[4][1].isObstacle = True
+grid[4][0].isObstacle = True
+"""
+start = grid[0][0]
+end   = grid[7][3]
 
-G[1][2].isObstacle = True
-G[2][2].isObstacle = True
-G[3][2].isObstacle = True
-G[4][2].isObstacle = True
-G[4][1].isObstacle = True
-G[4][0].isObstacle = True
-
-start = G[0][0]
-end   = G[7][3]
-
-def show_buttons():
-    for b in buttons:
-        b.draw(win)
+startNode, endNode = None, None
+alg = None
 
 running = True
 while running:  
-    win.fill(background)
-    #draw_grid(win, G)
-    show_buttons()
+    update_window(win, buttons, grid)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            #make_maze(win,G)
-            #dfs(win,G,start,end)
-            #Dijkstra(win, G, start)
-            #Astar(win,G,start,end)
-            #get_path(G, start, end)
             x, y = event.pos
-            for b in buttons:
-                print("button",b.text, "is pressed:",b.isOver([x,y]))
-            #add_obstacle(G, [x,y])
-    
-    pygame.display.update()
+            
+            #bfs(win,grid,start,end)
+            #make_maze(win,grid)
+            #dfs(win,grid,start,end)
+            #Dijkstra(win, grid, start)
+            #Astar(win,grid,start,end)
+            #get_path(grid, start, end)
+            
+            node = node_click(grid, [x,y])
+            print(node.i,node.j)
+            if node:
+                if node.isStart:
+                    node.isStart = False
+                    startNode = None
+                if startNode == None:
+                    startNode = node
+                    node.isStart = True
+                if startNode and endNode == None:
+                    endNode = node
+                    node.isEnd = True
 
 
 

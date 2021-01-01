@@ -6,7 +6,7 @@ import numpy as np
 import random
 from collections import deque
 from queue import PriorityQueue
-from misc import *
+from UI import *
 
 def get_path(grid, start, end):
     path = []

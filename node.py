@@ -14,6 +14,8 @@ class node:
         self.inQueue   = False
         self.distance  = sys.maxsize
         
+        self.isStart    = False
+        self.isEnd    = False
         self.isObstacle = False
         self.isOnPath   = False
         

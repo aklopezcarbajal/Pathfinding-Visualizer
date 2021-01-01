@@ -2,6 +2,8 @@
 UI | Pathfinding Visualizer
 """
 import pygame
+import numpy as np
+from node import node
 
 #Background
 background = '#55708D'
@@ -12,12 +14,105 @@ button_color = '#4E6E91'
 font_color = '#07111D'
 
 #Grid
+grid_position = [0,40]
+
 unvisited_color = '#A2A6BE'
 visited_color = '#373660'
 inQueue_color = '#408289'
 path_color = '#873E59'
 obstacle_color = '#243547'
 
+
+NODESIZE = 15
+DIST = 5
+
+#Colors
+bg    = (80,80,80)
+green = (80,255,80)
+blue  = (100,100,255)
+darkBlue = (30,30,60)
+red   = (255,100,100)
+grey  = (130,130,130)
+darkGrey = (30,30,30)
+
+
+def update_window(win, buttons, grid):
+    win.fill(bg)
+    
+    for b in buttons:
+        b.draw(win)
+        
+    draw_grid(win, grid)
+    #pygame.display.update()
+
+def create_grid(n, m):
+    grid =[]
+    for i in range(n):
+        row = []
+        for j in range(m):
+            row.append(node(i,j))
+        grid.append(row)
+    return grid
+            
+def connect_nodes(grid):
+    n = np.size(grid, 0)
+    m = np.size(grid, 1)
+    
+    for i in range(n):
+        for j in range(m):
+            grid[i][j].find_neighbors(grid)
+
+def node_click(grid, position):
+    [i,j] = position_to_index(position[0], position[1])
+    
+    rows = np.size(grid, 0)
+    cols = np.size(grid, 1)
+    if 0 <= i and i < rows:
+        if 0 <= j and j < cols:
+            return grid[i][j]
+    return None
+    
+def position_to_index(x,y):
+    x -= grid_position[0]
+    y -= grid_position[1]
+    i = int( (y-DIST - NODESIZE/2)/(DIST + NODESIZE) )
+    j = int( (x-DIST - NODESIZE/2)/(DIST + NODESIZE) )
+    return [i,j]
+    
+def index_to_position(i, j):
+    x = int( (j+1)*DIST + j*NODESIZE + NODESIZE/2 )
+    y = int( (i+1)*DIST + i*NODESIZE + NODESIZE/2)
+    return [x + grid_position[0],y + grid_position[1]]
+
+
+def draw_grid(win, grid):
+    rows = np.size(grid, 0)
+    cols = np.size(grid, 1)
+    
+    for i in range(0,rows):
+        for j in range(0,cols):
+            [x,y] = index_to_position(i, j)
+            #y += grid_position[1]
+            
+            pygame.draw.rect(win, grey, (x,y,NODESIZE,NODESIZE) )
+            
+            if grid[i][j].isObstacle:
+                pygame.draw.rect(win, darkGrey, (x,y,NODESIZE,NODESIZE) )
+            else:
+                if grid[i][j].inQueue:
+                    pygame.draw.circle(win, blue, (x +NODESIZE/2,y +NODESIZE/2), NODESIZE/2 - 1)
+                if grid[i][j].visited:
+                    pygame.draw.rect(win, darkBlue, (x,y,NODESIZE,NODESIZE) )
+                if grid[i][j].isOnPath:
+                    pygame.draw.rect(win, green, (x,y,NODESIZE,NODESIZE) )
+                if grid[i][j].isStart:
+                    pygame.draw.rect(win, path_color, (x,y,NODESIZE,NODESIZE) )
+                if grid[i][j].isEnd:
+                    pygame.draw.rect(win, path_color, (x,y,NODESIZE,NODESIZE) )
+
+    pygame.display.update()
+
+#---------- Button class ----------
 class button():
     def __init__(self, position, width, height, text=''):
         self.color = button_color
@@ -36,10 +131,11 @@ class button():
             text = font.render(self.text, 1, font_color)
             win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
-    def isOver(self, pos):
+    def isPressed(self, x, y):
         #Pos is the mouse position or a tuple of (x,y) coordinates
-        if pos[0] > self.x and pos[0] < self.x + self.width:
-            if pos[1] > self.y and pos[1] < self.y + self.height:
+        if x > self.x and x < self.x + self.width:
+            if y > self.y and y < self.y + self.height:
+                print("button pressed")
                 return True
             
         return False
