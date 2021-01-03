@@ -71,8 +71,7 @@ def Dijkstra(win, grid, s):
     s.distance = 0
     
     while not queue.empty():
-        u_id = queue.get()[1]
-        u = get_node(grid,u_id)
+        u = get_node(grid,queue.get()[1])
         
         for v in u.neighbors:
             if valid(v):
@@ -199,15 +198,21 @@ def make_maze(win, grid):
                     wall_list.append(v)
         
         del wall_list[randi]
-        
+    
+    entr, ext = None, None
     #Create entance and exit
     for j in range(m):
         if not grid[1][j].isObstacle:
             grid[0][j].isObstacle = False
+            grid[0][j].isStart
+            entr = grid[0][j] 
             break
     for j in range(m):
         if not grid[n-2][m-j-1].isObstacle:
             grid[n-1][m-j-1].isObstacle = False
+            grid[n-1][m-j-1].isEnd
+            ext = grid[n-1][m-j-1] 
             break
+    return entr, ext
 
     

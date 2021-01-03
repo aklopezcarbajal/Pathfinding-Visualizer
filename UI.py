@@ -4,6 +4,8 @@ UI | Pathfinding Visualizer
 import pygame
 import numpy as np
 from node import node
+from tkinter import *
+from tkinter import messagebox
 
 #Background
 background = '#55708D'
@@ -62,15 +64,34 @@ def connect_nodes(grid):
         for j in range(m):
             grid[i][j].find_neighbors(grid)
 
-def node_click(grid, position):
+def grid_click(grid, position):
     [i,j] = position_to_index(position[0], position[1])
     
     rows = np.size(grid, 0)
     cols = np.size(grid, 1)
     if 0 <= i and i < rows:
         if 0 <= j and j < cols:
-            return grid[i][j]
-    return None
+            return True
+    return False
+
+def set_start(grid, position):
+    [i,j] = position_to_index(position[0], position[1])
+    if not grid[i][j].isEnd and not grid[i][j].isObstacle:
+        grid[i][j].isStart = True
+        return grid[i][j]
+
+def set_end(grid, position):
+    [i,j] = position_to_index(position[0], position[1])
+    if not grid[i][j].isStart and not grid[i][j].isObstacle:
+        grid[i][j].isEnd = True
+        return grid[i][j]
+
+def set_obstacle(grid, position):
+    [i,j] = position_to_index(position[0], position[1])
+    if grid[i][j].isObstacle:
+        grid[i][j].isObstacle = False
+    elif not grid[i][j].isStart and not grid[i][j].isEnd:
+        grid[i][j].isObstacle = True
     
 def position_to_index(x,y):
     x -= grid_position[0]
@@ -92,7 +113,6 @@ def draw_grid(win, grid):
     for i in range(0,rows):
         for j in range(0,cols):
             [x,y] = index_to_position(i, j)
-            #y += grid_position[1]
             
             pygame.draw.rect(win, grey, (x,y,NODESIZE,NODESIZE) )
             
@@ -108,9 +128,22 @@ def draw_grid(win, grid):
                 if grid[i][j].isStart:
                     pygame.draw.rect(win, path_color, (x,y,NODESIZE,NODESIZE) )
                 if grid[i][j].isEnd:
-                    pygame.draw.rect(win, path_color, (x,y,NODESIZE,NODESIZE) )
+                    pygame.draw.rect(win, green, (x,y,NODESIZE,NODESIZE) )
 
     pygame.display.update()
+
+def reset_grid(grid):
+    rows = np.size(grid, 0)
+    cols = np.size(grid, 1)
+    
+    for i in range(rows):
+        for j in range(cols):
+            grid[i][j].reset()
+    
+def show_message():
+    Tk().wm_withdraw() #to hide the main window
+    messagebox.showinfo('Continue','Please select a start node and an end node')
+            
 
 #---------- Button class ----------
 class button():

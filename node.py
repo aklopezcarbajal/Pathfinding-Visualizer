@@ -15,7 +15,7 @@ class node:
         self.distance  = sys.maxsize
         
         self.isStart    = False
-        self.isEnd    = False
+        self.isEnd      = False
         self.isObstacle = False
         self.isOnPath   = False
         
@@ -33,6 +33,17 @@ class node:
         if self.j < cols-1:
             self.neighbors.append(grid[self.i][self.j+1])
             
+    def reset(self):
+        self.parent     = None
+        self.visited    = False
+        self.inQueue    = False
+        self.distance   = sys.maxsize
+        
+        self.isStart    = False
+        self.isEnd      = False
+        self.isObstacle = False
+        self.isOnPath   = False
+        
         
         
         

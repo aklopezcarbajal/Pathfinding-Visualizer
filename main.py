@@ -12,39 +12,25 @@ pygame.init()
 W, H = 800,600
 win = pygame.display.set_mode((W,H))
 
-ROWS, COLS = 28, 40#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
+ROWS, COLS = 25, 35#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
 
 #Buttons
-buttonWidth, buttonHeight = 70, 35
-buttons = []
-bfs_button = button( [10,10], buttonWidth, buttonHeight, 'BFS' )
-buttons.append(bfs_button)
-dfs_button = button( [20+buttonWidth,10], buttonWidth, buttonHeight, 'DFS' )
-buttons.append(dfs_button)
-Astar_button = button( [10 +2*(10+buttonWidth),10], buttonWidth, buttonHeight, 'A*' )
-buttons.append(Astar_button)
-maze_button = button( [10+ 3*(10+buttonWidth),10], buttonWidth, buttonHeight, 'Maze' )
-buttons.append(maze_button)
+buttonWidth, buttonHeight = 80, 35
+bfs_button      = button( [10,10], buttonWidth, buttonHeight, 'BFS' )
+dfs_button      = button( [20+buttonWidth,10], buttonWidth, buttonHeight, 'DFS' )
+Dijkstra_button = button( [10+ 2*(10+buttonWidth),10], buttonWidth, buttonHeight, 'Dijkstra' )
+Astar_button    = button( [10 +3*(10+buttonWidth),10], buttonWidth, buttonHeight, 'A*' )
+maze_button     = button( [10 +4*(10+buttonWidth),10], buttonWidth, buttonHeight, 'Maze' )
+reset_button    = button( [10 +5*(10+buttonWidth),10], buttonWidth, buttonHeight, 'Reset' )
+
+buttons = [bfs_button, dfs_button, Dijkstra_button, Astar_button, maze_button, reset_button]
 
 fonts = pygame.font.get_fonts()
 """--------------------------------------------------------"""
-
+#Initialize grid
 grid = create_grid(ROWS, COLS)
 connect_nodes(grid)  
-#Obstacle
-"""
-grid[1][2].isObstacle = True
-grid[2][2].isObstacle = True
-grid[3][2].isObstacle = True
-grid[4][2].isObstacle = True
-grid[4][1].isObstacle = True
-grid[4][0].isObstacle = True
-"""
-start = grid[0][0]
-end   = grid[7][3]
-
 startNode, endNode = None, None
-alg = None
 
 running = True
 while running:  
@@ -56,25 +42,46 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             
-            #bfs(win,grid,start,end)
-            #make_maze(win,grid)
-            #dfs(win,grid,start,end)
-            #Dijkstra(win, grid, start)
-            #Astar(win,grid,start,end)
-            #get_path(grid, start, end)
+            #Check buttons
+            if bfs_button.isPressed(x,y):
+                if not startNode or not endNode:
+                    show_message()
+                else:
+                    bfs(win,grid,startNode,endNode)
+                    get_path(grid, startNode, endNode)
+            if dfs_button.isPressed(x,y):
+                if not startNode or not endNode:
+                    show_message()
+                else:
+                    dfs(win,grid,startNode,endNode)
+                    get_path(grid, startNode, endNode)
+            if Dijkstra_button.isPressed(x,y):
+                if not startNode or not endNode:
+                    show_message()
+                else:
+                    Dijkstra(win, grid, startNode)
+                    get_path(grid, startNode, endNode)
+            if Astar_button.isPressed(x,y):
+                if not startNode or not endNode:
+                    show_message()
+                else:
+                    Astar(win,grid,startNode,endNode)
+                    get_path(grid, startNode, endNode)
+            if maze_button.isPressed(x,y):
+                startNode, endNode = make_maze(win,grid)
+            if reset_button.isPressed(x,y):
+                reset_grid(grid)
+                startNode, endNode = None, None
             
-            node = node_click(grid, [x,y])
-            print(node.i,node.j)
-            if node:
-                if node.isStart:
-                    node.isStart = False
-                    startNode = None
-                if startNode == None:
-                    startNode = node
-                    node.isStart = True
-                if startNode and endNode == None:
-                    endNode = node
-                    node.isEnd = True
+            onGrid = grid_click(grid, [x,y])
+            
+            if onGrid:
+                if startNode and endNode:
+                    set_obstacle(grid, [x,y])
+                if startNode and not endNode:
+                    endNode = set_end(grid, [x,y])
+                if not startNode:
+                    startNode = set_start(grid, [x,y])
 
 
 
