@@ -9,7 +9,7 @@ from UI import *
 pygame.init()
 
 #Window
-W, H = 800,600
+W, H = 700, 550
 win = pygame.display.set_mode((W,H))
 
 ROWS, COLS = 25, 35#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )

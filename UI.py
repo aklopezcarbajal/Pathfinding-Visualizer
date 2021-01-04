@@ -8,38 +8,26 @@ from tkinter import *
 from tkinter import messagebox
 
 #Background
-background = '#55708D'
+background = '#EEE2DC'#55708D'
 
 #Buttons
-outline_color = '#153C62'
-button_color = '#4E6E91'
-font_color = '#07111D'
+button_color = '#B0A8AB'#4E6E91'
+font_color = '#2F4454'
 
 #Grid
 grid_position = [0,40]
-
-unvisited_color = '#A2A6BE'
-visited_color = '#373660'
-inQueue_color = '#408289'
-path_color = '#873E59'
-obstacle_color = '#243547'
-
-
 NODESIZE = 15
-DIST = 5
+DIST = 3
 
-#Colors
-bg    = (80,80,80)
-green = (80,255,80)
-blue  = (100,100,255)
-darkBlue = (30,30,60)
-red   = (255,100,100)
-grey  = (130,130,130)
-darkGrey = (30,30,30)
+unvisited_color = '#BAB2B5'
+visited_color = '#123C69'
+inQueue_color = '#374785'
+path_color = '#AC3B61'
+obstacle_color = '#112636'
 
 
 def update_window(win, buttons, grid):
-    win.fill(bg)
+    win.fill(background)
     
     for b in buttons:
         b.draw(win)
@@ -65,12 +53,14 @@ def connect_nodes(grid):
             grid[i][j].find_neighbors(grid)
 
 def grid_click(grid, position):
-    [i,j] = position_to_index(position[0], position[1])
-    
     rows = np.size(grid, 0)
     cols = np.size(grid, 1)
-    if 0 <= i and i < rows:
-        if 0 <= j and j < cols:
+    
+    w, h = grid_position[0] + (NODESIZE + DIST)*cols, grid_position[1] + (NODESIZE + DIST)*rows
+    
+    
+    if grid_position[0] <= position[0] and position[0] < w:
+        if grid_position[1] <= position[1] and position[1] < h:
             return True
     return False
 
@@ -114,22 +104,21 @@ def draw_grid(win, grid):
         for j in range(0,cols):
             [x,y] = index_to_position(i, j)
             
-            pygame.draw.rect(win, grey, (x,y,NODESIZE,NODESIZE) )
+            pygame.draw.rect(win, unvisited_color, (x,y,NODESIZE,NODESIZE) )
             
             if grid[i][j].isObstacle:
-                pygame.draw.rect(win, darkGrey, (x,y,NODESIZE,NODESIZE) )
-            else:
+                pygame.draw.rect(win, obstacle_color, (x,y,NODESIZE,NODESIZE) )
+            if grid[i][j].isStart:
+                pygame.draw.polygon(win, '#253A4A',( (x+1,y), (x+NODESIZE -1, y+NODESIZE/2), (x+1,y+NODESIZE) ) )
+            if grid[i][j].isEnd:
+                pygame.draw.circle(win, '#253A4A', (x +NODESIZE/2,y +NODESIZE/2), int(NODESIZE/2) - 1)
+            if not grid[i][j].isStart and not grid[i][j].isEnd and not grid[i][j].isObstacle:
                 if grid[i][j].inQueue:
-                    pygame.draw.circle(win, blue, (x +NODESIZE/2,y +NODESIZE/2), NODESIZE/2 - 1)
+                    pygame.draw.circle(win, inQueue_color, (x +NODESIZE/2,y +NODESIZE/2), NODESIZE/2 - 1)
                 if grid[i][j].visited:
-                    pygame.draw.rect(win, darkBlue, (x,y,NODESIZE,NODESIZE) )
+                    pygame.draw.rect(win, visited_color, (x,y,NODESIZE,NODESIZE) )
                 if grid[i][j].isOnPath:
-                    pygame.draw.rect(win, green, (x,y,NODESIZE,NODESIZE) )
-                if grid[i][j].isStart:
                     pygame.draw.rect(win, path_color, (x,y,NODESIZE,NODESIZE) )
-                if grid[i][j].isEnd:
-                    pygame.draw.rect(win, green, (x,y,NODESIZE,NODESIZE) )
-
     pygame.display.update()
 
 def reset_grid(grid):

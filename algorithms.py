@@ -16,9 +16,6 @@ def get_path(grid, start, end):
         path.append(u)
         u = u.parent
     
-    u.isOnPath = True
-    path.append(u)
-    
 def valid(u):
     if not u.visited and not u.isObstacle and not u.inQueue:
         return True
@@ -81,11 +78,11 @@ def Dijkstra(win, grid, s):
                     v.parent = u
                     queue.put((v.distance, node_id(v)))
                     v.inQueue = True
-                    draw_grid(win,grid)
+                    #draw_grid(win,grid)
                     
+        draw_grid(win,grid)
         u.visited = True
         v.inQueue = False
-        draw_grid(win,grid)
 
  #Distance to the end node (Manhattan Distance)
 def h(u, e):
@@ -199,20 +196,27 @@ def make_maze(win, grid):
         
         del wall_list[randi]
     
-    entr, ext = None, None
+    jEntrance, jExit = 0, 0
     #Create entance and exit
     for j in range(m):
         if not grid[1][j].isObstacle:
-            grid[0][j].isObstacle = False
-            grid[0][j].isStart
-            entr = grid[0][j] 
+            jEntrance = j
             break
     for j in range(m):
         if not grid[n-2][m-j-1].isObstacle:
-            grid[n-1][m-j-1].isObstacle = False
-            grid[n-1][m-j-1].isEnd
-            ext = grid[n-1][m-j-1] 
+            jExit = m-j-1
             break
-    return entr, ext
+    
+    grid[0][jEntrance].isObstacle = False
+    grid[0][jEntrance].isStart    = True
+    grid[n-1][jExit].isObstacle = False
+    grid[n-1][jExit].isEnd      = True
+    for i in range(n):
+        for j in range(m):
+            if grid[i][j].visited and not grid[i][j].isObstacle:
+                grid[i][j].visited = False
+    
+    draw_grid(win,grid)
+    return grid[0][jEntrance], grid[n-1][jExit]
 
     
