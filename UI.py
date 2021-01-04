@@ -38,6 +38,7 @@ def update_window(win, buttons, grid):
 def create_grid(n, m):
     grid =[]
     for i in range(n):
+        pygame.event.pump()
         row = []
         for j in range(m):
             row.append(node(i,j))
@@ -49,6 +50,7 @@ def connect_nodes(grid):
     m = np.size(grid, 1)
     
     for i in range(n):
+        pygame.event.pump()
         for j in range(m):
             grid[i][j].find_neighbors(grid)
 
@@ -97,6 +99,7 @@ def index_to_position(i, j):
 
 
 def draw_grid(win, grid):
+    pygame.event.pump()
     rows = np.size(grid, 0)
     cols = np.size(grid, 1)
     
@@ -143,14 +146,15 @@ class button():
         self.width = width
         self.height = height
         self.text = text
+        self.font = pygame.font.SysFont('consolas', 20)
+        self.fontColor = font_color
         
     def draw(self,win):
         #pygame.draw.rect(win, outline_color, (self.x-2,self.y-2,self.width+4,self.height+4),0)
         pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),border_radius=5)
         
         if self.text != '':
-            font = pygame.font.SysFont('arial', 20)
-            text = font.render(self.text, 1, font_color)
+            text = self.font.render(self.text, 1, self.fontColor)
             win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
     def isPressed(self, x, y):
@@ -161,3 +165,10 @@ class button():
                 return True
             
         return False
+    
+    def set_color(self, tag, color):
+        if tag == 'button':
+            self.color = color
+        if tag == 'font':
+            self.fontColor = color
+        

@@ -78,7 +78,7 @@ def Dijkstra(win, grid, s):
                     v.parent = u
                     queue.put((v.distance, node_id(v)))
                     v.inQueue = True
-                    #draw_grid(win,grid)
+                    draw_grid(win,grid)
                     
         draw_grid(win,grid)
         u.visited = True
@@ -216,7 +216,6 @@ def make_maze(win, grid):
             if grid[i][j].visited and not grid[i][j].isObstacle:
                 grid[i][j].visited = False
     
-    draw_grid(win,grid)
     return grid[0][jEntrance], grid[n-1][jExit]
 
     

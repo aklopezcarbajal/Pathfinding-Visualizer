@@ -2,35 +2,37 @@
 Pathfinding visualizer
 """
 import pygame
-import numpy as np
+import sys
 from algorithms import *
 from UI import *
 
 pygame.init()
 
 #Window
-W, H = 700, 550
+W, H = 740, 600
 win = pygame.display.set_mode((W,H))
-
-ROWS, COLS = 25, 35#int(W/(NODESIZE+DIST)), int(H/(NODESIZE+DIST) )
+pygame.display.set_caption("Pathfinding Visualizer")
 
 #Buttons
 buttonWidth, buttonHeight = 80, 35
-bfs_button      = button( [10,10], buttonWidth, buttonHeight, 'BFS' )
-dfs_button      = button( [20+buttonWidth,10], buttonWidth, buttonHeight, 'DFS' )
-Dijkstra_button = button( [10+ 2*(10+buttonWidth),10], buttonWidth, buttonHeight, 'Dijkstra' )
+bfs_button      = button( [10,10], buttonWidth-10, buttonHeight, 'BFS' )
+dfs_button      = button( [10+buttonWidth,10], buttonWidth-10, buttonHeight, 'DFS' )
+Dijkstra_button = button( [10 +2*buttonWidth,10], buttonWidth+20, buttonHeight, 'Dijkstra' )
 Astar_button    = button( [10 +3*(10+buttonWidth),10], buttonWidth, buttonHeight, 'A*' )
 maze_button     = button( [10 +4*(10+buttonWidth),10], buttonWidth, buttonHeight, 'Maze' )
 reset_button    = button( [10 +5*(10+buttonWidth),10], buttonWidth, buttonHeight, 'Reset' )
+reset_button.set_color('button','#EDC7B7')
+reset_button.set_color('font','#AC3B61')
 
 buttons = [bfs_button, dfs_button, Dijkstra_button, Astar_button, maze_button, reset_button]
 
-fonts = pygame.font.get_fonts()
-"""--------------------------------------------------------"""
 #Initialize grid
-grid = create_grid(ROWS, COLS)
+rows, cols = 30, 40
+grid = create_grid(rows, cols)
 connect_nodes(grid)  
 startNode, endNode = None, None
+
+"""--------------------------------------------------------"""
 
 running = True
 while running:  
@@ -74,7 +76,6 @@ while running:
                 startNode, endNode = None, None
             
             onGrid = grid_click(grid, [x,y])
-            
             if onGrid:
                 if startNode and endNode:
                     set_obstacle(grid, [x,y])
@@ -82,6 +83,8 @@ while running:
                     endNode = set_end(grid, [x,y])
                 if not startNode:
                     startNode = set_start(grid, [x,y])
-
+                
+pygame.quit()
+sys.exit()
 
 
