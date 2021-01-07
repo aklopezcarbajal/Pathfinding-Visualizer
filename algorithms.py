@@ -15,6 +15,9 @@ def get_path(grid, start, end):
         u.isOnPath = True
         path.append(u)
         u = u.parent
+    if len(path) == 0:
+        return False
+    return True
     
 def valid(u):
     if not u.visited and not u.isObstacle and not u.inQueue:
@@ -172,6 +175,10 @@ def make_maze(win, grid):
     for i in range(n):
         for j in range(m):
             grid[i][j].isObstacle = True
+            if grid[i][j].isStart:
+                grid[i][j].isStart = False
+            if grid[i][j].isEnd:
+                grid[i][j].isEnd = False
     #Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
     s = grid[random.randrange(1,n-1)][random.randrange(1,m-1)] #Avoid the edge of the maze
     s.visited = True

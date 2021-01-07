@@ -1,5 +1,14 @@
 """
 Pathfinding visualizer
+--------------------------------------------------------
+How to:
+    - Select start node
+    - Select target node
+    - Add obstacles
+    - Choose an algorithm
+    or
+    - Select Maze
+    - Choose an algorithm
 """
 import pygame
 import sys
@@ -47,28 +56,32 @@ while running:
             #Check buttons
             if bfs_button.isPressed(x,y):
                 if not startNode or not endNode:
-                    show_message()
+                    show_message('info')
                 else:
                     bfs(win,grid,startNode,endNode)
-                    get_path(grid, startNode, endNode)
+                    if not get_path(grid, startNode, endNode):
+                        show_message('error')
             if dfs_button.isPressed(x,y):
                 if not startNode or not endNode:
-                    show_message()
+                    show_message('info')
                 else:
                     dfs(win,grid,startNode,endNode)
-                    get_path(grid, startNode, endNode)
+                    if not get_path(grid, startNode, endNode):
+                        show_message('error')
             if Dijkstra_button.isPressed(x,y):
                 if not startNode or not endNode:
-                    show_message()
+                    show_message('info')
                 else:
                     Dijkstra(win, grid, startNode)
-                    get_path(grid, startNode, endNode)
+                    if not get_path(grid, startNode, endNode):
+                        show_message('error')
             if Astar_button.isPressed(x,y):
                 if not startNode or not endNode:
-                    show_message()
+                    show_message('info')
                 else:
                     Astar(win,grid,startNode,endNode)
-                    get_path(grid, startNode, endNode)
+                    if not get_path(grid, startNode, endNode):
+                        show_message('error')
             if maze_button.isPressed(x,y):
                 startNode, endNode = make_maze(win,grid)
             if reset_button.isPressed(x,y):

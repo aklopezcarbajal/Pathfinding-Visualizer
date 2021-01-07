@@ -132,10 +132,13 @@ def reset_grid(grid):
         for j in range(cols):
             grid[i][j].reset()
     
-def show_message():
+def show_message(tag):
     Tk().wm_withdraw() #to hide the main window
-    messagebox.showinfo('Continue','Please select a start node and an end node')
-            
+    if tag == 'info':
+        messagebox.showinfo(title='Instructions',message = 'Please select start and target nodes')
+    if tag == 'error':
+        messagebox.showerror(title ='Error',message = 'Path not found')
+        
 
 #---------- Button class ----------
 class button():
@@ -161,7 +164,6 @@ class button():
         #Pos is the mouse position or a tuple of (x,y) coordinates
         if x > self.x and x < self.x + self.width:
             if y > self.y and y < self.y + self.height:
-                print("button pressed")
                 return True
             
         return False
